@@ -1,0 +1,42 @@
+<form nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Name</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback nzErrorTip="Employee Name is must">
+      <input nz-input formControlName="name" placeholder="Enter Employee Name" type="text" />
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Salary</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzHasFeedback nzErrorTip="Please input your Salary!">
+      <input nz-input formControlName="salary" placeholder="Enter Employee Salary" type="text" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Date og joning</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Date of Joning is Must">
+      <input nz-input formControlName="date_of_joning" placeholder="Enter Employee" type="date" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-label [nzSpan]="7" nzRequired>Age</nz-form-label>
+    <nz-form-control [nzSpan]="12" nzErrorTip="Age is must">
+      <input nz-input formControlName="age" placeholder="Age" type="number" />
+    </nz-form-control>
+  </nz-form-item>
+
+  <nz-form-item>
+    <nz-form-control [nzOffset]="7" [nzSpan]="12">
+      <div class="button-div">
+        <div class="left-button">
+          <button nz-button  nzType="primary" [disabled]="!validateForm.valid" style="">Submit</button>
+        </div>
+        <div >
+          <button nz-button nzType="primary" (click)="resetForm($event)">Reset</button>
+        </div>
+      </div>
+    </nz-form-control>
+  </nz-form-item>
+</form>
