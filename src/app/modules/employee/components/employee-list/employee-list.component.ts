@@ -36,7 +36,9 @@ export class EmployeeListComponent implements OnInit {
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.employees = this.employees.filter(val => val.id !== selectedEmployee.id)
+        // this.employees = this.employees.filter(val => val.id !== selectedEmployee.id)
+        // this.employees.splice(this.employees.indexOf(selectedEmployee), 1);
+        this.employeeService.employeesSubject.next( this.employees.filter(val => val.id !== selectedEmployee.id))
         this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Employee Deleted', life: 3000});
       },
       reject: () => {
@@ -44,6 +46,7 @@ export class EmployeeListComponent implements OnInit {
       }
     })
   }
+
 
   getEmployees() {
     this.loading = true;

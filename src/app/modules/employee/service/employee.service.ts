@@ -7,7 +7,6 @@ import {BehaviorSubject, Observable} from "rxjs";
 export class EmployeeService {
   constructor(private http: HttpClient) { }
 
-  // employee: EmployeeDto[] = []
   public employeesSubject: BehaviorSubject<EmployeeDto[]> = new BehaviorSubject<EmployeeDto[]>([])
 
   getEmployees(): Observable<EmployeeDto[]> {
