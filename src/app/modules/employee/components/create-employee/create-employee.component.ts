@@ -62,13 +62,9 @@ export class CreateEmployeeComponent implements OnInit {
 
   addEmployee(data: EmployeeDto): void {
     console.log('add employee', data);
-    const employee = this.employeeService
-      .employeesSubject
-      .value;
+    const employee = this.employeeService.employeesSubject.value;
     employee.push(data);
-    this.employeeService
-      .employeesSubject
-      .next(employee);
+    this.employeeService.employeesSubject.next(employee);
     this.validateForm.reset();
   }
 }

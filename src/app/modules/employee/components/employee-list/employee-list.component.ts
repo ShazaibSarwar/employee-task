@@ -1,9 +1,10 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 
 import {ConfirmationService, MessageService} from "primeng/api";
 import {EmployeeService} from "../../service/employee.service";
 import {EmployeeDto} from "../../dto/employee.dto";
 import {Table} from 'primeng/table';
+import {Subscription} from "rxjs";
 
 
 @Component({
@@ -12,15 +13,20 @@ import {Table} from 'primeng/table';
   styleUrls: ['./employee-list.component.sass'],
   providers: [MessageService]
 })
-export class EmployeeListComponent implements OnInit {
+export class EmployeeListComponent implements OnInit, OnDestroy {
 
   employees: EmployeeDto[] = [];
   statuses: any[] = [];
   loading: boolean = false;
+  private readonly subs: Subscription = new Subscription()
 
   constructor(private employeeService: EmployeeService,
               private messageService: MessageService,
               private confirmationService: ConfirmationService) {
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -38,7 +44,7 @@ export class EmployeeListComponent implements OnInit {
       accept: () => {
         // this.employees = this.employees.filter(val => val.id !== selectedEmployee.id)
         // this.employees.splice(this.employees.indexOf(selectedEmployee), 1);
-        this.employeeService.employeesSubject.next( this.employees.filter(val => val.id !== selectedEmployee.id))
+        this.employeeService.employeesSubject.next(this.employees.filter(val => val.id !== selectedEmployee.id))
         this.messageService.add({severity: 'success', summary: 'Successful', detail: 'Employee Deleted', life: 3000});
       },
       reject: () => {
@@ -50,22 +56,25 @@ export class EmployeeListComponent implements OnInit {
 
   getEmployees() {
     this.loading = true;
-    this.employeeService.getEmployees().subscribe({
-      next: value => {
-        this.employeeService.employeesSubject.next(value)
-        this.loading = false;
-      },
-      error: err => {
-        console.log(err)
-        this.loading = false;
-      },
-      complete: () => {
-        this.loading = false;
-      }
-    })
+    this.subs.add(
+      this.employeeService.getEmployees().subscribe({
+        next: value => {
+          this.employeeService.employeesSubject.next(value)
+          this.loading = false;
+        },
+        error: err => {
+          console.log(err)
+          this.loading = false;
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      })
+    )
   }
 
   subscribeToEmployee(): void {
+    this.subs.add(
     this.employeeService.employeesSubject
       .subscribe({
         next: value => {
@@ -73,6 +82,7 @@ export class EmployeeListComponent implements OnInit {
           this.employees = value
         }
       })
+    )
   }
 
   clear(table: Table): void {
